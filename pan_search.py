@@ -32,6 +32,7 @@ def __searchBDPan(keyword):
 			regLink = re.compile(r'<h3 class=\"t\".*<a.*href=\"(.*?)\".*?>(.*)</a></h3>', re.S) #匹配 
 			for l in tableContent:
 				m = regLink.search(l)
+				#注：这里需要讲读取出来的字符串接码为unicode编码，然后到输出的时候按需要编码
 				listItem.append(BDPanItem(m.group(2).replace('<em>', '《').replace('</em>', '》').decode('utf-8'), m.group(1).decode('utf-8')))
 		except Exception, e:
 			pass
@@ -45,7 +46,7 @@ def __toFeedbackXML(list):
 			__addItem(rootElement, l.name, l.link, 'yes')
 	else:
 		__addItem(rootElement, '未搜索到内容，请重新搜索...', '', 'no')
-	return ElementTree.tostring(rootElement, 'utf-8')
+	return ElementTree.tostring(rootElement, 'utf-8') #按需要编码
 
 def __addItem(parent,title,arg = None,valid = 'yes'):
 	item = ElementTree.SubElement(parent, "item")
